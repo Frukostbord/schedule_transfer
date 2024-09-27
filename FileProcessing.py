@@ -5,7 +5,7 @@ from openpyxl.workbook.workbook import Workbook
 
 class FileProcessing:
     @staticmethod
-    def reformat_data_csv(path: str):
+    def reformat_data_csv(path: str) -> list:
         cleaned_data = []
 
         """ Method for getting data from a CSV file with work times of employees"""

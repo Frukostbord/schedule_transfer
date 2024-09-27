@@ -1,4 +1,5 @@
 import os
+from MinimumStaff import MINIMUM_STAFF
 class DataFormatter:
     @staticmethod
     def format_date(data: list[str]) -> list[str]:
@@ -77,3 +78,11 @@ class DataFormatter:
         care_unit_name = os.path.splitext(os.path.basename(unformatted_care_unit_name))[0]
 
         return care_unit_name
+
+    @staticmethod
+    def get_minimum_worker_formatted(care_unit: str) -> str:
+        minimum_workers = MINIMUM_STAFF[care_unit]
+        formatted_text = f"Antal: {minimum_workers}"
+
+        return formatted_text
+

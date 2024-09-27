@@ -3,6 +3,7 @@ from openpyxl.worksheet.worksheet import Worksheet
 from openpyxl.workbook.workbook import Workbook
 from DataFormatter import DataFormatter
 
+
 class FileExporter:
     @staticmethod
     def export_date(current_sheet, data: list):
@@ -45,3 +46,12 @@ class FileExporter:
         care_unit = DataFormatter.get_care_unit_name(care_unit_not_formatted)
         worksheet["B2"] = care_unit
 
+    @staticmethod
+    def add_minimum_staff(care_unit_not_formatted: str, worksheet: Worksheet):
+        care_unit = DataFormatter.get_care_unit_name(care_unit_not_formatted)
+        minimum_workers_formatted = DataFormatter.get_minimum_worker_formatted(care_unit)
+
+        for index, value in enumerate(range(6), start=3):
+            if value:
+                column_letter = get_column_letter(index)  # Get the letter of the column (A, B, C, ...)
+                worksheet[f"{column_letter}3"] = minimum_workers_formatted  # Place the value in row 1, column A, B, C, ...

@@ -16,3 +16,5 @@ if __name__ == '__main__':
         new_file = pathways[path][1]
 
         FileTransfer(old_file, new_file)
+
+    print("File transfer was succesful!")
