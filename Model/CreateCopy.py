@@ -1,5 +1,5 @@
 import shutil
-import Pathways
+from Model import Pathways
 
 
 class CreateCopy:

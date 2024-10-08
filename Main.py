@@ -1,9 +1,16 @@
-from CreateCopy import CreateCopy
-from FileTransfer import FileTransfer
-import Pathways
+import tkinter as tk
+from Controller import Controller
+from View import View
+
 
 # Start program here
 if __name__ == '__main__':
+    root = tk.Tk()
+    viewmodel = Controller.App_Controller()
+    app = View.FileTransferView(root, viewmodel)
+    root.mainloop()
+
+    """
     # Create copies for the Excel files to be saved at from the template
     CreateCopy.create_copies()
 
@@ -18,3 +25,4 @@ if __name__ == '__main__':
         FileTransfer(old_file, new_file)
 
     print("File transfer was succesful!")
+    """

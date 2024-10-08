@@ -2,7 +2,7 @@ import openpyxl
 from FileExporter import FileExporter
 from FileProcessing import FileProcessing
 from FileReader import FileReader
-from TransferStages import TransferStage
+from Model.TransferStages import TransferStage
 
 
 class FileTransfer:

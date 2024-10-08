@@ -1,5 +1,5 @@
 import os
-from MinimumStaff import MINIMUM_STAFF
+from Model.MinimumStaff import MINIMUM_STAFF
 class DataFormatter:
     @staticmethod
     def format_date(data: list[str]) -> list[str]:
