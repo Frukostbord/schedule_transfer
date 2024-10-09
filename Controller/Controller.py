@@ -8,8 +8,16 @@ class FileTransferController:
         self.model = None
         SetInitializationData.set_initial_data()  # Sets pathways etc. for the program to use.
 
-    def add_csv_files(self, files: Tuple[str]) -> List[str]:
-        return self.check_csv_files(files)
+    def add_csv_files(self, files: List[str], current_paths: List[str]) -> List[str]:
+        valid_format_and_path = self.check_csv_files(files)
+        unique_valid_csv_files = []
+
+        # Update listbox with valid files
+        for file in valid_format_and_path:
+            if file not in current_paths:
+                unique_valid_csv_files.append(file)
+
+        return unique_valid_csv_files
 
     def check_all_data(self, files: Union[str, List[str]], save_path: str) -> bool:
         """ Checks to see if all user input is correct """
@@ -69,7 +77,7 @@ class FileTransferController:
                 if valid_csv_file:
                     csv_files["Correct_csv_files"].append(file)
                 else:
-                    csv_files["Faulty_csv_files"].append(files)
+                    csv_files["Faulty_csv_files"].append(file)
 
         return csv_files
 

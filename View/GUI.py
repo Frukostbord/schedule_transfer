@@ -35,21 +35,16 @@ class FileTransferView:
 
 
     def add_csv_files(self):
-        files = filedialog.askopenfilenames(title="Välj filer som ska föras över ifrån")
+        files = list(filedialog.askopenfilenames(title="Välj filer som ska föras över ifrån"))
 
         if files:
             # Filter only valid files
-            valid_files = self.controller.add_csv_files(files)
+            current_files = list(self.listbox_file_pathways.get(0, tk.END))
+            valid_files = self.controller.add_csv_files(files, current_files)
 
-            # Update listbox with valid files
             for file in valid_files:
-                if not self.check_for_duplicate_listbox(file):
-                    self.listbox_file_pathways.insert(tk.END, file)
+                self.listbox_file_pathways.insert(tk.END, file)
 
-    def check_for_duplicate_listbox(self, string: str) -> bool:
-        items = self.listbox_file_pathways.get(0, tk.END)
-
-        return string in items
 
     def remove_selected_file(self):
         selected = self.listbox_file_pathways.curselection()
