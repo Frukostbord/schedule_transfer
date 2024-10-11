@@ -2,9 +2,10 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
 import Controllers
+from typing import List
 
 class FileTransferView:
-    def __init__(self, master: tk.Tk(), controller: Controllers.Controller):
+    def __init__(self, master: tk.Tk, controller):
         self.master = master
         self.controller = controller
         self.master.title("Filöverföring - Ifrån Timecare till Excel")
@@ -35,16 +36,18 @@ class FileTransferView:
         self.label_save_path.grid(row=1, column=0, columnspan=1, padx=10, pady=10)
 
 
-    def add_csv_files(self):
+    def add_csv_files(self) -> None:
         files = list(filedialog.askopenfilenames(title="Välj filer som ska föras över ifrån"))
 
         if files:
             # Filter only valid files
-            current_files = list(self.listbox_file_pathways.get(0, tk.END))
-            valid_files = self.controller.add_csv_files(files, current_files)
+            valid_files = self.controller.check_and_add_csv_files(files)
 
-            for file in valid_files:
-                self.listbox_file_pathways.insert(tk.END, file)
+            self.add_files_to_listbox(valid_files)  # Adds files to listbox
+
+    def add_files_to_listbox(self, files_to_add: List[str]) -> None:
+        for file in files_to_add:
+            self.listbox_file_pathways.insert(tk.END, file)
 
     def remove_selected_file(self):
         selected = self.listbox_file_pathways.curselection()
@@ -60,7 +63,7 @@ class FileTransferView:
 
     def save_path(self):
         pathway = filedialog.askdirectory(title="Välj var filerna ska sparas")
-        if self.controller.check_save_path(pathway):
+        if self.controller.check_and_set_save_pathway(pathway):
             self.label_save_path.config(text=pathway)
 
     def start_transfer(self):
