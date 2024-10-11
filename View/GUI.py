@@ -1,9 +1,10 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
+import Controllers
 
 class FileTransferView:
-    def __init__(self, master, controller):
+    def __init__(self, master: tk.Tk(), controller: Controllers.Controller):
         self.master = master
         self.controller = controller
         self.master.title("Filöverföring - Ifrån Timecare till Excel")
@@ -45,7 +46,6 @@ class FileTransferView:
             for file in valid_files:
                 self.listbox_file_pathways.insert(tk.END, file)
 
-
     def remove_selected_file(self):
         selected = self.listbox_file_pathways.curselection()
         if selected:
@@ -60,7 +60,7 @@ class FileTransferView:
 
     def save_path(self):
         pathway = filedialog.askdirectory(title="Välj var filerna ska sparas")
-        if pathway:
+        if self.controller.check_save_path(pathway):
             self.label_save_path.config(text=pathway)
 
     def start_transfer(self):

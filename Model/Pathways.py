@@ -1,4 +1,8 @@
-TEMPLATE_WORKBOOK_PATHWAY = r"C:\Users\Combi\Desktop\Tider SSK\Grundmall\Grundmall.xlsx"
+APPLICATION_PATHWAY = ""
+
+TEMPLATE_WORKBOOK_PATHWAY = ""
+
+SAVE_PATH = ""
 
 DICTIONARY_PATHWAYS = \
     {
@@ -22,5 +26,9 @@ DICTIONARY_PATHWAYS = \
                         r"C:\Users\Combi\Desktop\Tider SSK\Scheman_Nya\Tallhöjden.xlsx"],
          "Wijbacken": [r"C:\Users\Combi\Desktop\Tider SSK\Scheman_Gamla\Wijbacken.csv",
                        r"C:\Users\Combi\Desktop\Tider SSK\Scheman_Nya\Wijbacken.xlsx"]
-
     }
+
+
+
+
+
