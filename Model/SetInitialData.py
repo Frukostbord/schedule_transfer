@@ -1,4 +1,4 @@
-import Pathways
+import Model.Pathways as Pathways
 
 
 class SetInitialData:

@@ -1,6 +1,6 @@
-from CheckInitialData import CheckInitialData
-from CheckAndSetPaths import CheckAndSetCSV, CheckAndSetSavePath
-import Pathways
+from Model.CheckInitialData import CheckInitialData
+from Model.CheckAndSetPaths import CheckAndSetCSV, CheckAndSetSavePath
+import Model.Pathways as Pathways
 
 
 class ModelMain:

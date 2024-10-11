@@ -1,6 +1,6 @@
-from CheckFiles import CheckFiles
-from DataFormatter import DataFormatter
-import Pathways
+from Model.CheckFiles import CheckFiles
+from Model.DataFormatter import DataFormatter
+import Model.Pathways as Pathways
 
 
 class CheckAndSetSavePath:

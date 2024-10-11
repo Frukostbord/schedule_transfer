@@ -1,5 +1,5 @@
 import os
-from SetInitialData import SetInitialData
+from Model.SetInitialData import SetInitialData
 
 
 class CheckInitialData:
@@ -24,6 +24,7 @@ class CheckInitialData:
     @classmethod
     def get_program_pathway(cls) -> None:
         cls.application_pathway = os.path.dirname(os.path.abspath(__file__))
+
 
     @classmethod
     def check_template_exist(cls, application_directory: str) -> bool:

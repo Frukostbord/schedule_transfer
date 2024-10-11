@@ -1,4 +1,5 @@
 from Controllers.Error import Error
+import Model.Pathways as Pathways
 
 
 class FileTransferController:
@@ -10,7 +11,7 @@ class FileTransferController:
         """
         Sets the initial data of the program
         """
-        if not self.model.intialize_data():
+        if not self.model.initialize_data():
             Error.error_message(
                 "Grundmallen kunde inte hittas. Vänligen se till att den finns innan du kör programmet")
 
