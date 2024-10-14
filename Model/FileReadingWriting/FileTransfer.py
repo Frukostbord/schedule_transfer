@@ -1,12 +1,13 @@
 import openpyxl
-from FileExporter import FileExporter
-from FileProcessing import FileProcessing
-from FileReader import FileReader
-from TransferStages import TransferStage
+from Model.FileReadingWriting.FileExporter import FileExporter
+from Model.FileReadingWriting.FileProcessing import FileProcessing
+from Model.Enum.TransferStages import TransferStage
+from Model.FileReadingWriting.CreateCopy import CreateCopy
+import Model.Data.Pathways as Pathways
 
 
 class FileTransfer:
-    """ Main class for handling everything
+    """ Main class for handling the FileTransfer
         Uses the three enums under TransferStages to perform different tasks
         1. CHECK_FILES:
             1a. Checks files and if the paths are correct
@@ -18,17 +19,16 @@ class FileTransfer:
         Lastly, it saves the file and the program terminates
      """
 
-    def __init__(self, path_csv_excel: str, path_excel_out: str):
-        self.path_csv_excel = path_csv_excel
-        self.path_excel_out = path_excel_out
-        self.cleaned_data = []
-        self.workbook_export = None
+    def __init__(self, csv_pathway: str):
+        self.template_workbook = openpyxl.load_workbook(Pathways.TEMPLATE_WORKBOOK_PATHWAY)
+        self.cleaned_data: list = []
+        self.path_csv_excel: str = csv_pathway
         self.current_work_sheet = None
-        self.start_transfer()
+        self.workbook_export = None
 
     def start_transfer(self):
         """ Initiates the file transfer process through various stages. """
-        current_stage = TransferStage.CHECK_FILES
+        current_stage = TransferStage.CREATE_COPY
 
         while True:  # Loop until export stage is complete
             self.execute_stage(current_stage)
@@ -40,26 +40,18 @@ class FileTransfer:
 
     def execute_stage(self, stage: TransferStage):
         """ Executes the logic for the current transfer stage. """
-        if stage == TransferStage.CHECK_FILES:
-            self.check_files()
+        if stage == TransferStage.CREATE_COPY:
+            self.create_copy()
         elif stage == TransferStage.PROCESS_DATA:
             self.process_data()
         elif stage == TransferStage.EXPORT_DATA:
             self.export_data()
 
-    def check_files(self):
-        """ Method using FileReader class to check that the files are correct"""
-        try:
-            # Checks to see if the files can be open properly
-            FileReader.check_files(self.path_csv_excel, self.path_excel_out)
-            self.set_workbook()
-        except Exception as e:
-            print(f"Something went wrong with the file pathways, please look over the error: {e}")
+    def create_copy(self):
+        save_path = CreateCopy.create_copy(self.path_csv_excel)
+        self.workbook_export = openpyxl.load_workbook(save_path)
 
-    def set_workbook(self):
-        self.workbook_export = openpyxl.load_workbook(self.path_excel_out)
-
-    def process_data(self):
+    def process_data(self) -> None:
         """ This method cleans the data and sets the workbook where the data is to be exported """
         try:
             # Cleans all the data, so it can be easily exported
@@ -68,14 +60,10 @@ class FileTransfer:
         except Exception as e:
             print(f"Something went wrong with the file processing, please look over the error: {e}")
 
-    def export_data(self):
-        try:
-            if self.export_all_data():
-                print("Exporting data was successful!")
-        except Exception as e:
-            print(f"Something went wrong with the file exporting, please look over the error: {e}")
+    def export_data(self) -> None:
+        self.export_all_data()
 
-    def export_all_data(self):
+    def export_all_data(self) -> None:
         # Copies data to sheet
         self.copy_data_to_sheet()
 
@@ -104,8 +92,6 @@ class FileTransfer:
                 self.add_employee_work_times(values, counter)
                 counter += 1
 
-
-
     def add_data_to_sheet(self, dates: list):
         self.add_dates(self.current_work_sheet, dates)  # Adds the dates to the top column of the sheet
 
@@ -113,7 +99,7 @@ class FileTransfer:
         self.add_minimum_staff()
 
     def save_exported_excel(self):
-        FileExporter.save_file(self.path_excel_out, self.workbook_export)
+        FileExporter.save_file(self.workbook_export)
 
     def add_dates(self, current_sheet, dates: list):
         FileExporter.export_date(current_sheet, dates)
@@ -122,7 +108,8 @@ class FileTransfer:
         FileExporter.add_employee_work_time(worker_info, self.current_work_sheet, count)
 
     def create_sheet(self, week: str):
-        FileExporter.create_work_sheet(week, self.workbook_export)  # Create a sheet with the week  # Creates the sheet
+        # Create a sheet with the week
+        FileExporter.create_work_sheet(week, self.workbook_export)
 
     def add_care_unit_name(self):
         FileExporter.add_care_unit_name(self.path_csv_excel, self.current_work_sheet)

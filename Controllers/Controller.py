@@ -1,5 +1,5 @@
 from Controllers.Error import Error
-import Model.Pathways as Pathways
+import Model.Data.ErrorMessages as ErrorMessages
 
 
 class FileTransferController:
@@ -21,25 +21,9 @@ class FileTransferController:
 
         if files_pathways_dict["Faulty_csv_files"]:
             Error.error_message(
-                f"Följande fil(-er) fungerade inte att öppna {", ".join(files_pathways_dict["Faulty_csv_files"])}")
+                f"Följande fil(-er) fungerade inte att öppna:\n{"\n".join(files_pathways_dict["Faulty_csv_files"])}")
 
         return files_pathways_dict["Correct_csv_files"]
-
-    def check_all_data(self, files, save_path: str) -> bool:
-        """ Checks to see if all user input is correct """
-
-        # Check to see if parameters have data
-        if not files:
-            Error.error_message("Du måste välja en eller flera filer ifrån TimeCare.")
-        if not save_path:
-            Error.error_message("Du måste välja var alla filer ska sparas.")
-
-        # Check to see if data is correct
-        file_types = self.check_csv_files(files)
-        save_path = self.check_file_path(save_path)
-
-        return file_types and save_path
-
 
     def check_and_set_save_pathway(self, save_pathway: str) -> bool:
         """
@@ -52,9 +36,25 @@ class FileTransferController:
             Error.error_message("Katalog för filerna kunde inte väljas. Vänligen välja en annan.")
             return False
 
+    def start_transfer(self) -> None:
+        # Checks to see if all user input is correct before proceeding
+        if self.check_all_data():
+            self.model.transfer_data_csv_to_excel()
+
+    def remove_file(self, indexes_to_delete: tuple[int]) -> None:
+        self.model.remove_csv_files(indexes_to_delete)
+
+    def check_all_data(self) -> bool:
+        """ Checks to see if all user input is correct """
+
+        checked_paths: dict = self.model.check_all_pathways()
+
+        for pathway in checked_paths:
+            if not checked_paths[pathway]:
+                Error.error_message(ErrorMessages.ERROR_MESSAGES_TRANSLATED[pathway])
+                return False
+
         return True
 
-
-    def start_transfer(self, files, save_path) -> None:
-        check = self.check_all_data(files, save_path)  # Checks to see if all user input is correct before proceeding
-
+    def get_files(self) -> list[str]:
+        return self.model.get_current_csv_files()

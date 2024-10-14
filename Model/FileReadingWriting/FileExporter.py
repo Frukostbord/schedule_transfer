@@ -1,7 +1,8 @@
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.worksheet import Worksheet
 from openpyxl.workbook.workbook import Workbook
-from DataFormatter import DataFormatter
+import Model.Data.Pathways as Pathways
+from Model.FileReadingWriting.DataFormatter import DataFormatter
 
 
 class FileExporter:
@@ -37,8 +38,8 @@ class FileExporter:
 
 
     @staticmethod
-    def save_file(path: str, workbook: Workbook):
-        workbook.save(path)
+    def save_file(workbook: Workbook):
+        workbook.save(Pathways.SAVE_PATH)
         workbook.close()
 
     @staticmethod

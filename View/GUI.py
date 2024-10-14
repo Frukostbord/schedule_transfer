@@ -11,7 +11,7 @@ class FileTransferView:
         self.master.title("Filöverföring - Ifrån Timecare till Excel")
 
         # Listbox to display selected files
-        self.listbox_file_pathways = tk.Listbox(master, width=100, height=10)
+        self.listbox_file_pathways = tk.Listbox(master, selectmode=tk.EXTENDED, width=100, height=10)
         self.listbox_file_pathways.grid(row=0, column=0, padx=10, pady=10)
 
         # Buttons
@@ -28,12 +28,13 @@ class FileTransferView:
         self.button_quit.grid(row=2, column=1, padx=10, pady=10)
 
         self.button_save_path = tk.Button(master, text="Sparas", command=self.save_path)
-        self.button_save_path.grid(row=1, column=0, padx=(10, 550), pady=10)
+        self.button_save_path.grid(row=1, column=0, padx=(10, 550), pady=(10, 27))
 
         # Adding labels
         self.label_save_path = (
-            tk.Label(master, text="Välj var filerna ska sparas", font=("Arial", 9), width=65, wraplength=450))
-        self.label_save_path.grid(row=1, column=0, columnspan=1, padx=10, pady=10)
+            tk.Label(master, text="Välj var filerna ska sparas",
+                     font=("Arial", 9), width=65, wraplength=550, height=2, anchor="nw"))
+        self.label_save_path.grid(row=1, column=0)
 
 
     def add_csv_files(self) -> None:
@@ -52,13 +53,15 @@ class FileTransferView:
     def remove_selected_file(self):
         selected = self.listbox_file_pathways.curselection()
         if selected:
-            index = selected[0]
-            self.controller.remove_file(index)
+            selected_reversed = list(reversed(selected))
+            self.controller.remove_file(selected_reversed)
             self.update_listbox()
 
     def update_listbox(self):
         self.listbox_file_pathways.delete(0, tk.END)
-        for file in self.controller.get_files():
+        current_csv_files = self.controller.get_files()
+
+        for file in current_csv_files:
             self.listbox_file_pathways.insert(tk.END, file)
 
     def save_path(self):
@@ -67,9 +70,7 @@ class FileTransferView:
             self.label_save_path.config(text=pathway)
 
     def start_transfer(self):
-        save_path = self.label_save_path.cget("text")
-        csv_files = self.listbox_file_pathways.get(0, tk.END)
-        self.controller.start_transfer(csv_files, save_path)
+        self.controller.start_transfer()
 
     @staticmethod
     def show_message(message):

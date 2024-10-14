@@ -1,16 +1,16 @@
 import os
-from Model.SetInitialData import SetInitialData
+from Model.InitializeData.SetInitialData import SetInitialData
+from pathlib import Path
 
 
 class CheckInitialData:
     application_pathway: str = None
     template_pathway: str = None
+    template_subdir: str = r"\Grundmall\Grundmall.xlsx"
 
     @classmethod
-    def check_initial_data(cls) -> bool:
-        cls.check_pathways_exist()
-
-        if cls.template_pathway:
+    def initialize_data(cls) -> bool:
+        if cls.check_pathways_exist():
             SetInitialData.set_initial_data(cls.application_pathway, cls.template_pathway)
             return True
 
@@ -29,7 +29,9 @@ class CheckInitialData:
     @classmethod
     def check_template_exist(cls, application_directory: str) -> bool:
         """ Checks to see if the template for the Excel file exists """
-        template = application_directory + r"\Grundmall\Grundmall.xlsx"
+        base_path = Path(application_directory).parents[1]
+
+        template = f"{base_path}{cls.template_subdir}"
 
         if os.path.exists(template):
             cls.template_pathway = template
