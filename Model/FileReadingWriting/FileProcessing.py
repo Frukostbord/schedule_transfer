@@ -1,5 +1,5 @@
 import pandas as pd
-from DataFormatter import DataFormatter
+from Model.FileReadingWriting.DataFormatter import DataFormatter
 from openpyxl.worksheet.worksheet import Worksheet
 from openpyxl.workbook.workbook import Workbook
 

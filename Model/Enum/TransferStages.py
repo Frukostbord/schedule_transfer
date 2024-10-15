@@ -2,9 +2,10 @@ from enum import Enum
 
 
 class TransferStage(Enum):
-    CHECK_FILES = 0
+    CREATE_COPY = 0
     PROCESS_DATA = 1
     EXPORT_DATA = 2
+    TRANSFER_COMPLETE = 3
 
     @staticmethod
     def get_next_stage(stage):
