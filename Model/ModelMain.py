@@ -1,3 +1,6 @@
+# Python lib
+from typing import Union
+
 # Local applications
 from Model.InitializeData.InitializeData import InitializeData
 from Model.CheckPaths.CheckCSVPath import CheckCSVPath
@@ -7,6 +10,7 @@ from Model.SetPaths.SetCSVPath import SetCSVPath
 from Model.CheckPaths.CheckFile import CheckFiles
 from Model.FileReadingWriting.FileTransfer import FileTransfer
 from Model.RemoveFiles.RemoveCSVFiles import RemoveCSVFiles
+from Model.Enum.TransferStages import TransferStage
 import Model.Data.Pathways as Pathways
 
 
@@ -59,10 +63,21 @@ class ModelMain:
 
         return check_pathways
 
-    def transfer_data_csv_to_excel(self) -> None:
+    def transfer_data_csv_to_excel(self) -> Union[bool, tuple[TransferStage, str]]:
         for pathway in Pathways.DICTIONARY_PATHWAYS:
             self.file_transfer = FileTransfer(Pathways.DICTIONARY_PATHWAYS[pathway])
-            self.file_transfer.start_transfer()
+
+            transfer_check = self.file_transfer.start_transfer()
+            if not self.check_file_transfer_correct(transfer_check):
+                return transfer_check, pathway
+
+        return True
+
+    def check_file_transfer_correct(self, transfer_complete: TransferStage) -> bool:
+        return transfer_complete == TransferStage.TRANSFER_COMPLETE
+
+    def get_save_path(self) -> str:
+        return Pathways.SAVE_PATH
 
     def remove_csv_files(self, index_files_to_remove: tuple[int]) -> None:
         RemoveCSVFiles.remove_csv_files(index_files_to_remove)

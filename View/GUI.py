@@ -70,11 +70,24 @@ class FileTransferView:
             self.label_save_path.config(text=pathway)
 
     def start_transfer(self):
-        self.controller.start_transfer()
+        if self.controller.start_transfer():
+            self.reset_ui()
+
+    def reset_ui(self):
+        self.update_save_path()
+        self.update_listbox()
+
+    def update_save_path(self):
+        save_path = self.controller.get_save_path()
+        self.label_save_path.config(text=save_path)
 
     @staticmethod
-    def show_message(message):
+    def show_error_message(message:str) -> None:
         messagebox.showerror("Error", message)
+
+    @staticmethod
+    def show_message(title: str, message: str) -> None:
+        messagebox.showinfo(title, message)
 
     def quit_app(self):
         self.master.quit()

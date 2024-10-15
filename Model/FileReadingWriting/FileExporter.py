@@ -1,7 +1,6 @@
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.worksheet import Worksheet
 from openpyxl.workbook.workbook import Workbook
-import Model.Data.Pathways as Pathways
 from Model.FileReadingWriting.DataFormatter import DataFormatter
 
 
@@ -38,12 +37,13 @@ class FileExporter:
 
 
     @staticmethod
-    def save_file(workbook: Workbook):
-        workbook.save(Pathways.SAVE_PATH)
+    def save_file(workbook: Workbook, save_path_workbook: str):
+        workbook.save(save_path_workbook)
         workbook.close()
 
+
     @staticmethod
-    def add_care_unit_name(care_unit_not_formatted: str, worksheet: Worksheet):
+    def add_care_unit_name(care_unit_not_formatted: str, worksheet: Worksheet) -> None:
         care_unit = DataFormatter.get_care_unit_name(care_unit_not_formatted)
         worksheet["B2"] = care_unit
 

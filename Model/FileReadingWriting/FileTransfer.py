@@ -25,81 +25,98 @@ class FileTransfer:
         self.path_csv_excel: str = csv_pathway
         self.current_work_sheet = None
         self.workbook_export = None
+        self.save_path: str = str()
 
-    def start_transfer(self):
+    def start_transfer(self) -> TransferStage:
         """ Initiates the file transfer process through various stages. """
         current_stage = TransferStage.CREATE_COPY
 
         while True:  # Loop until export stage is complete
-            self.execute_stage(current_stage)
+            check = self.execute_stage(current_stage)
 
-            if current_stage == TransferStage.EXPORT_DATA:
-                break  # Exit after export data is complete
+            if current_stage == TransferStage.EXPORT_DATA and check:
+                return TransferStage.TRANSFER_COMPLETE
+
+            if not check:
+                return current_stage
 
             current_stage = TransferStage.get_next_stage(current_stage)  # Move to the next stage
 
-    def execute_stage(self, stage: TransferStage):
+    def execute_stage(self, stage: TransferStage) -> bool:
         """ Executes the logic for the current transfer stage. """
         if stage == TransferStage.CREATE_COPY:
-            self.create_copy()
+            return self.create_template_copy()
         elif stage == TransferStage.PROCESS_DATA:
-            self.process_data()
+            return self.process_data()
         elif stage == TransferStage.EXPORT_DATA:
-            self.export_data()
+            return self.export_data()
 
-    def create_copy(self):
-        save_path = CreateCopy.create_copy(self.path_csv_excel)
-        self.workbook_export = openpyxl.load_workbook(save_path)
+    def create_template_copy(self) -> bool:
 
-    def process_data(self) -> None:
+        try:
+            save_path = CreateCopy.create_copy(self.path_csv_excel)
+            self.save_path = save_path
+            self.workbook_export = openpyxl.load_workbook(self.save_path)
+            return True
+        except Exception as e:
+            return False
+
+    def process_data(self) -> bool:
         """ This method cleans the data and sets the workbook where the data is to be exported """
         try:
             # Cleans all the data, so it can be easily exported
             self.cleaned_data = FileProcessing.reformat_data_csv(self.path_csv_excel)
+            return True
 
         except Exception as e:
-            print(f"Something went wrong with the file processing, please look over the error: {e}")
+            return False
 
-    def export_data(self) -> None:
-        self.export_all_data()
+    def export_data(self) -> bool:
+        return self.export_all_data()
 
-    def export_all_data(self) -> None:
-        # Copies data to sheet
-        self.copy_data_to_sheet()
+    def export_all_data(self) -> bool:
+        data_export_successful = (
+                self.copy_data_to_sheet() and  # Copies data to sheet
+                self.remove_template() and  # Remove template worksheet
+                self.save_exported_excel())  # Saves the edited file
 
-        # Remove template worksheet
-        self.remove_template()
+        return data_export_successful
 
-        # Saves the edited file
-        self.save_exported_excel()
+    def copy_data_to_sheet(self) -> bool:
+        try:
+            counter = 1  # So we know which column to add which data
 
-    def copy_data_to_sheet(self):
-        counter = 1  # So we know which column to add which data
+            for values in self.cleaned_data:
+                # If the word "Vecka" is seen, it means that a new sheet has to be set
+                if "Vecka" in values[0]:
+                    counter = 1
+                    week = values[0]
 
-        for values in self.cleaned_data:
-            # If the word "Vecka" is seen, it means that a new sheet has to be set
-            if "Vecka" in values[0]:
-                counter = 1
-                week = values[0]
-
-                self.create_sheet(week)  # Creates the worksheet
-                self.current_work_sheet = self.workbook_export[week]  # Sets the current sheet
-                self.add_data_to_sheet(values)
+                    self.create_sheet(week)  # Creates the worksheet
+                    self.current_work_sheet = self.workbook_export[week]  # Sets the current sheet
+                    self.add_data_to_sheet(values)
 
 
-            # There´s employee name and time to add to the sheet
-            else:
-                self.add_employee_work_times(values, counter)
-                counter += 1
+                # There´s employee name and time to add to the sheet
+                else:
+                    self.add_employee_work_times(values, counter)
+                    counter += 1
+
+            return True
+        except Exception as e:
+            return False
 
     def add_data_to_sheet(self, dates: list):
         self.add_dates(self.current_work_sheet, dates)  # Adds the dates to the top column of the sheet
-
         self.add_care_unit_name()
         self.add_minimum_staff()
 
-    def save_exported_excel(self):
-        FileExporter.save_file(self.workbook_export)
+    def save_exported_excel(self) -> bool:
+        try:
+            FileExporter.save_file(self.workbook_export, self.save_path)
+            return True
+        except Exception as e:
+            return False
 
     def add_dates(self, current_sheet, dates: list):
         FileExporter.export_date(current_sheet, dates)
@@ -114,12 +131,12 @@ class FileTransfer:
     def add_care_unit_name(self):
         FileExporter.add_care_unit_name(self.path_csv_excel, self.current_work_sheet)
 
-
-    def remove_template(self):
-        workbook = self.workbook_export
-        FileProcessing.remove_work_sheet(workbook["Mall"], workbook)
+    def remove_template(self) -> bool:
+        try:
+            FileProcessing.remove_work_sheet(self.workbook_export["Mall"], self.workbook_export)
+            return True
+        except Exception as e:
+            return False
 
     def add_minimum_staff(self):
         FileExporter.add_minimum_staff(self.path_csv_excel, self.current_work_sheet)
-
-
