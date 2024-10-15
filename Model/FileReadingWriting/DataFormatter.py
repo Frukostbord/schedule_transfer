@@ -1,9 +1,5 @@
 import os
-<<<<<<<< HEAD:Model/DataFormatter.py
-from Model.MinimumStaff import MINIMUM_STAFF
-========
 from Model.Data.MinimumStaff import MINIMUM_STAFF
->>>>>>>> MVC-test:Model/FileReadingWriting/DataFormatter.py
 class DataFormatter:
     @staticmethod
     def format_date(data: list[str]) -> list[str]:
