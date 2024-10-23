@@ -38,7 +38,6 @@ class ModelMain:
 
         return False
 
-
     def check_and_set_csv_files(self, file_pathways: list) -> dict[str:list[str]]:
         """
         :param file_pathways: Dictionary of correct and faulty csv_files
@@ -54,27 +53,42 @@ class ModelMain:
         return pathways_sorted
 
     def check_all_pathways(self) -> dict[str:bool]:
+        """
+        Calls methods to check data
+        :return: Returns a dictionary of the success of all checks of different data
+        """
+
         check_pathways: dict = {
-            "Application_pathway": bool(Pathways.APPLICATION_PATHWAY),
-            "CSV_files": CheckFiles.check_pathways(Pathways.DICTIONARY_PATHWAYS.values()),
-            "Save_path": CheckFiles.check_pathway(Pathways.SAVE_PATH),
-            "Template_path": CheckFiles.check_pathway(Pathways.TEMPLATE_WORKBOOK_PATHWAY)
+            "APPLICATION_PATHWAY": CheckFiles.check_pathway(Pathways.APPLICATION_PATHWAY),
+            "CSV_FILES": CheckFiles.check_pathways(Pathways.DICTIONARY_PATHWAYS.values()),
+            "SAVE_PATH": CheckFiles.check_pathway(Pathways.SAVE_PATH),
+            "TEMPLATE_PATH": CheckFiles.check_pathway(Pathways.TEMPLATE_WORKBOOK_PATHWAY)
         }
 
         return check_pathways
 
-    def transfer_data_csv_to_excel(self) -> Union[bool, tuple[TransferStage, str]]:
+    def transfer_data_csv_to_excel(self) -> Union[TransferStage, tuple[TransferStage, str]]:
+        """
+        Large method which transfers data
+        1.Takes all .csv file pathways
+        2.Goes through each .csv file, checks all data and then transfers it to a new Excel document
+        :return: Enum TRANSFER_COMPLETE if everything went fine, else returns where it went wrong
+        """
+
+        # Go through all files to be transferred
         for pathway in Pathways.DICTIONARY_PATHWAYS:
+
+            # Create a class for the transfer
             self.file_transfer = FileTransfer(Pathways.DICTIONARY_PATHWAYS[pathway])
 
             transfer_check = self.file_transfer.start_transfer()
-            if not self.check_file_transfer_correct(transfer_check):
+
+            # If the transfer fail, return information
+            if transfer_check != TransferStage.TRANSFER_COMPLETE:
                 return transfer_check, pathway
 
-        return True
+        return TransferStage.TRANSFER_COMPLETE
 
-    def check_file_transfer_correct(self, transfer_complete: TransferStage) -> bool:
-        return transfer_complete == TransferStage.TRANSFER_COMPLETE
 
     def get_save_path(self) -> str:
         return Pathways.SAVE_PATH
@@ -84,3 +98,6 @@ class ModelMain:
 
     def get_current_csv_files(self) -> list[str]:
         return Pathways.DICTIONARY_PATHWAYS.values()
+
+    def check_path(self, path: str) -> bool:
+        return CheckFiles.check_file_path(path)

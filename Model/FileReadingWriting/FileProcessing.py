@@ -4,40 +4,46 @@ from openpyxl.worksheet.worksheet import Worksheet
 from openpyxl.workbook.workbook import Workbook
 
 class FileProcessing:
+    """
+    This class is responsible for removing most of the unnecessary data in the .csv file, before it can be refined
+    and used to write in the Excel class
+    """
     @staticmethod
     def reformat_data_csv(path: str) -> list:
         cleaned_data = []
 
-        """ Method for getting data from a CSV file with work times of employees"""
         # Open file columns with Pandas, with no Header.
         df = pd.read_csv(path, header=None)
 
         for _ in df.columns:
             # Convert everything to lists
-            cleaned_columns = df[_].str.split().tolist()
+            columns = df[_].str.split().tolist()
 
-            # Iterate through all the lists and add each to the dictionary
-            for column in range(2, len(cleaned_columns)):
-                col = cleaned_columns[column]  # To shorten the name of the variable
+            # Iterate through all the lists, format the data and add it to the list
+            for column in range(2, len(columns)):
+                # To shorten the name of the variable
+                processed_data = FileProcessing.clean_csv_data(columns[column])
 
-                # Remove seperator with semicolons ";" in the csv files between weeks (columns)
-                if len(set(col[0])) == 1:
-                    continue
-
-                # Check to see if there´s useless information for the transfer
-                elif col[0] == "Ö;" or col[0] == "Förnamn;":
-                    continue
-
-                # Adds information to the list
-                else:
-                    formatted_data = FileProcessing.format_data(col)
-                    cleaned_data.append(formatted_data)
+                if processed_data:
+                    cleaned_data.append(processed_data)
 
         return cleaned_data  # Returns the cleaned data
 
+    @staticmethod
+    def clean_csv_data(raw_data: list[str]) -> list[str]:
+        if raw_data:
+            # Check for specific useless information in the first row
+            if raw_data[0] in {"Ö;", "Förnamn;"} or len(set(raw_data[0])) == 1:
+                return []
+
+            # Adds information to the list if all checks pass
+            else:
+                formatted_data = FileProcessing.format_csv_data(raw_data)
+                return formatted_data
+
 
     @staticmethod
-    def format_data(data: list[str]) -> list[str]:
+    def format_csv_data(data: list[str]) -> list[str]:
         #  1. Check what to format
         #  2. Call correct data formatter
         #  3. Return formatted data

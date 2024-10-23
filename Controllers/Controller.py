@@ -1,33 +1,27 @@
-from Controllers.PopupMessage import PopupMessage
-import Model.Data.ErrorMessages as ErrorMessages
 from typing import Union
 from Model.Enum.TransferStages import TransferStage
-from Model.Data.ErrorMessages import ERROR_MESSAGES_TRANSFERSTAGE
 from Model.Data.ResetData import ResetData
 
 
 class FileTransferController:
+
+    """
+    Controller class.
+    It´s main purpose is to:
+    1. Execute methods called from the View.
+    2. Call methods from the Model, which does all the calculations and checks.
+    """
     def __init__(self, model):
         self.model = model
-        self.initialize_data()
 
-    def initialize_data(self) -> None:
+    def initialize_data(self) -> bool:
         """
         Sets the initial data of the program
         """
-        if not self.model.initialize_data():
-            PopupMessage.error_message(
-                "Grundmallen kunde inte hittas. Vänligen se till att den finns innan du kör programmet")
+        return self.model.initialize_data()
 
-    def check_and_add_csv_files(self, files_pathways: list[str]) -> list[str]:
-
-        files_pathways_dict = self.model.check_and_set_csv_files(files_pathways)
-
-        if files_pathways_dict["Faulty_csv_files"]:
-            PopupMessage.error_message(
-                f"Följande fil(-er) fungerade inte att öppna:\n{"\n".join(files_pathways_dict["Faulty_csv_files"])}")
-
-        return files_pathways_dict["Correct_csv_files"]
+    def check_and_add_csv_files(self, files_pathways: list[str]) -> dict[str:list[str]]:
+        return self.model.check_and_set_csv_files(files_pathways)
 
     def check_and_set_save_pathway(self, save_pathway: str) -> bool:
         """
@@ -35,40 +29,43 @@ class FileTransferController:
         """
         if self.model.check_and_set_save_pathway(save_pathway):
             return True
+        return False
 
-        else:
-            PopupMessage.error_message("Katalog för filerna kunde inte väljas. Vänligen välja en annan.")
-            return False
+    def start_transfer(self) -> Union[bool, tuple[TransferStage, str]]:
+        """
+        Largest method which initiates the whole transfer process with data from the .csv file to the Excel file.
+        :return: True if everything went fine
+        """
 
-    def start_transfer(self) -> bool:
         # Checks to see if all user input is correct before proceeding
-        if self.check_all_data():
-            transfer_success = self.model.transfer_data_csv_to_excel()
-            self.display_transfer_success(transfer_success)
+        check = self.check_all_data()
 
-            if transfer_success:
-                FileTransferController.reset_gui_and_data()
+        if check is True:
+            # Starts transferring the data
+            transfer_success = self.model.transfer_data_csv_to_excel()
+
+            # Returns True if everything went fine
+            if transfer_success == TransferStage.TRANSFER_COMPLETE:
                 return True
 
+            # If there was an error with a certain file
+            else:
+                return transfer_success
+
+        # If the data wasn't up to snuff
         return False
 
     def get_save_path(self) -> str:
         return self.model.get_save_path()
 
     @staticmethod
-    def reset_gui_and_data():
+    def reset_data():
         ResetData.reset_data()
 
-    def display_transfer_success(self, transfer_event_success: Union[bool, tuple[TransferStage, str]]):
-        if transfer_event_success is True:
-            PopupMessage.pop_up_message("Klart!", "Överföringen gick utan problem!")
-
-        else:
-            PopupMessage.error_message(f"{ERROR_MESSAGES_TRANSFERSTAGE[transfer_event_success[0]]}\n"
-                                       f"Se över följande fil: {transfer_event_success[1]}")
-
-
     def remove_file(self, indexes_to_delete: tuple[int]) -> None:
+        """
+        Removes files from indexes in the tuple
+        """
         self.model.remove_csv_files(indexes_to_delete)
 
     def check_all_data(self) -> bool:
@@ -76,12 +73,15 @@ class FileTransferController:
 
         checked_paths: dict = self.model.check_all_pathways()
 
+        # Goes through all different types of pathways and if their respective check was successful
         for pathway in checked_paths:
             if not checked_paths[pathway]:
-                PopupMessage.error_message(ErrorMessages.ERROR_MESSAGES_TRANSLATED[pathway])
                 return False
 
         return True
 
-    def get_files(self) -> list[str]:
+    def check_path(self, path: str) -> bool:
+        return self.model.check_path(path)
+
+    def get_csv_files(self) -> list[str]:
         return self.model.get_current_csv_files()

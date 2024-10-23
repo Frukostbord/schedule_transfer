@@ -1,3 +1,7 @@
+"""
+Data with minimum staff of different retirement homes
+"""
+
 MINIMUM_STAFF = {
     "Måsnaren": 5,
     "Mariekällgården": 5,

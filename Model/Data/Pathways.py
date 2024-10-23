@@ -1,3 +1,7 @@
+"""
+Data for all different pathways
+"""
+
 APPLICATION_PATHWAY = ""
 
 TEMPLATE_WORKBOOK_PATHWAY = ""
