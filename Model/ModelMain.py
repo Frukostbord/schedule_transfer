@@ -72,7 +72,8 @@ class ModelMain:
         Large method which transfers data
         1.Takes all .csv file pathways
         2.Goes through each .csv file, checks all data and then transfers it to a new Excel document
-        :return: Enum TRANSFER_COMPLETE if everything went fine, else returns where it went wrong
+        :return: Enum TRANSFER_COMPLETE if everything went fine,
+        else returns where it went wrong with Enum TransferStage and which path was faulty
         """
 
         # Go through all files to be transferred

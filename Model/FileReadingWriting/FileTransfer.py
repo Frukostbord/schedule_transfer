@@ -3,6 +3,7 @@ from Model.FileReadingWriting.FileExporter import FileExporter
 from Model.FileReadingWriting.FileProcessing import FileProcessing
 from Model.Enum.TransferStages import TransferStage
 from Model.FileReadingWriting.CreateCopy import CreateCopy
+from Model.FileReadingWriting.FormatExcelTemplate import FormatExcelTemplate
 import Model.Data.Pathways as Pathways
 
 
@@ -43,6 +44,8 @@ class FileTransfer:
         """ Executes the logic for the current transfer stage. """
         if stage == TransferStage.CREATE_COPY:
             return self.create_template_copy()
+        elif stage == TransferStage.FORMAT_TEMPLATE:
+            return self.format_template()
         elif stage == TransferStage.PROCESS_DATA:
             return self.process_data()
         elif stage == TransferStage.EXPORT_DATA:
@@ -58,6 +61,18 @@ class FileTransfer:
             save_path = CreateCopy.create_excel_copy(self.path_csv_excel)
             self.save_path = save_path
             self.workbook_export = openpyxl.load_workbook(self.save_path)
+            return True
+        except Exception as e:
+            return False
+
+    def format_template(self) -> bool:
+        """
+        Formats the template to the amount of staff for the current care unit
+        :return: True if format was successful, else False
+        """
+
+        try:
+            FormatExcelTemplate.format_excel_template(self.path_csv_excel, self.workbook_export)
             return True
         except Exception as e:
             return False

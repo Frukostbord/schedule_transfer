@@ -8,9 +8,10 @@ class TransferStage(Enum):
     """
 
     CREATE_COPY = 0
-    PROCESS_DATA = 1
-    EXPORT_DATA = 2
-    TRANSFER_COMPLETE = 3
+    FORMAT_TEMPLATE = 1
+    PROCESS_DATA = 2
+    EXPORT_DATA = 3
+    TRANSFER_COMPLETE = 4
 
     @staticmethod
     def get_next_stage(stage: 'TransferStage') -> 'TransferStage':

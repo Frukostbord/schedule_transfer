@@ -15,7 +15,7 @@ class RemoveCSVFiles:
         """
 
         # Make tuple a list and reverse it
-        list_keys_reversed = reversed(list(indexes_files_to_remove))
+        list_keys_reversed = list(indexes_files_to_remove)[::-1]
 
         # Create a list of keys to remove from the dictionary
         keys_to_remove = []

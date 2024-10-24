@@ -31,9 +31,14 @@ class InitializeData:
         check = CheckInitialData()
 
         if check.check_initialization_data():
-            cls.application_pathway = check.application_pathway
-            cls.template_pathway = check.template_pathway
-            return True
+            cls.application_pathway = check.get_application_pathway()
+            cls.template_pathway = check.get_template_pathway()
+
+            if cls.template_pathway and cls.application_pathway:
+
+                return True
+
+        return False
 
     @classmethod
     def set_initial_data(cls) -> None:

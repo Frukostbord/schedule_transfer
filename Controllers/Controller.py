@@ -38,9 +38,9 @@ class FileTransferController:
         """
 
         # Checks to see if all user input is correct before proceeding
-        check = self.check_all_data()
+        checked_data = self.check_all_data()
 
-        if check is True:
+        if checked_data is True:
             # Starts transferring the data
             transfer_success = self.model.transfer_data_csv_to_excel()
 
@@ -52,8 +52,9 @@ class FileTransferController:
             else:
                 return transfer_success
 
-        # If the data wasn't up to snuff
-        return False
+        else:
+            # If the data wasn't up to snuff, return the
+            return checked_data
 
     def get_save_path(self) -> str:
         return self.model.get_save_path()
@@ -68,17 +69,17 @@ class FileTransferController:
         """
         self.model.remove_csv_files(indexes_to_delete)
 
-    def check_all_data(self) -> bool:
+    def check_all_data(self) -> Union[bool, dict[str:bool]]:
         """ Checks to see if all user input is correct """
 
         checked_paths: dict = self.model.check_all_pathways()
 
-        # Goes through all different types of pathways and if their respective check was successful
-        for pathway in checked_paths:
-            if not checked_paths[pathway]:
-                return False
+        # If all checks pass
+        if all(checked_paths.values()):
+            return True
 
-        return True
+        # If one or more checks fail
+        return checked_paths
 
     def check_path(self, path: str) -> bool:
         return self.model.check_path(path)

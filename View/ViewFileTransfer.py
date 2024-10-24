@@ -2,7 +2,9 @@ import os
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
+from typing import Union
 import View.ErrorMessages as ErrorMessages
+
 
 class FileTransferView:
 
@@ -124,12 +126,9 @@ class FileTransferView:
         if transfer_outcome is True:
             self.successful_transfer()
 
-        if transfer_outcome is False:
-            self.display_check_data_fail()
-
         # If everything did not go well, show what and where it went wrong for the user
         else:
-            self.transfer_problem(transfer_outcome)
+            self.transfer_unsuccessful(transfer_outcome)
 
     def display_check_data_fail(self):
         self.show_error_message("Grundmallen och/eller filerna med alla data har flyttats, är öppna eller ändrade.")
@@ -143,11 +142,29 @@ class FileTransferView:
         self.controller.reset_data()
         self.update_ui()
 
-    def transfer_problem(self, transfer_problem) -> None:
+    def transfer_unsuccessful(self, transfer_problem: Union[tuple, dict]) -> None:
+        if isinstance(transfer_problem, tuple):
+            self.problem_transfer(transfer_problem)
+        elif isinstance(transfer_problem, dict):
+            self.problem_data_check(transfer_problem)
+
+    def problem_data_check(self, data_checks: dict) -> None:
+        """
+        This method checks each data check and display each error that occurred
+        :param data_checks: a dictionary with all data checks, where each False boolean value is a faulty check
+        """
+        print("OK")
+        # Go through all the data checks and display an error for each faulty check
+        for data_check in data_checks:
+            if not data_checks[data_check]:
+                self.show_error_message(ErrorMessages.ERROR_MESSAGE_CHECK_DATA[data_check])
+
+    def problem_transfer(self, transfer_problem: tuple) -> None:
         """
         :param transfer_problem: The data of the encountered problem during transferring of data.
         Checks the data in the parameter and displays it accordingly to the user.
         """
+
         error_message = ""
         problem_encountered = transfer_problem[0]
         file_path = transfer_problem[1]
