@@ -24,6 +24,7 @@ class FormatExcelTemplate:
 
         cls.remove_replacement(minimum_staff, work_sheet)
         cls.remove_ordinary_employee(minimum_staff, work_sheet)
+        cls.format_row_height(minimum_staff, work_sheet)
 
 
     @classmethod
@@ -60,12 +61,21 @@ class FormatExcelTemplate:
         starting_row = 15
 
         if rows_to_remove > 0:
-            halfway_point = rows_to_remove // 2
-
-            for i, row in enumerate(range(starting_row, starting_row-rows_to_remove, -1)):
+            for row in range(starting_row, starting_row-rows_to_remove, -1):
                 work_sheet.delete_rows(row)
+                work_sheet.row_dimensions[row].height = 25
 
-                # Adjust the row height to be uniform. Only for visual effect
-                if i >= halfway_point:
-                    work_sheet.row_dimensions[row].height = 25
+    @classmethod
+    def format_row_height(cls, staff: int, work_sheet: worksheet) -> None:
+        """
+        Formats the row heights that have been deleted to be adjusted to the current amount of nurses of the care unit
+        :param staff: number of staff for the care_unit
+        :param work_sheet: worksheet to delete it from
+        """
+        start = 4 + (staff+1) * 3
+        stop = 22
+
+        if stop > start:
+            for row in range(start,stop):
+                work_sheet.row_dimensions[row].height = 15
 

@@ -52,6 +52,7 @@ class CheckInitialData:
         """
         Checks to see if the template for the Excel file exists and can be read
         """
+        print(application_directory)
         # Search for the file in the directory and its subdirectories
         for root, dirs, files in os.walk(application_directory):
             if cls.template_subdir in files:

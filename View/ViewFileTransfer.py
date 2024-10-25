@@ -153,7 +153,6 @@ class FileTransferView:
         This method checks each data check and display each error that occurred
         :param data_checks: a dictionary with all data checks, where each False boolean value is a faulty check
         """
-        print("OK")
         # Go through all the data checks and display an error for each faulty check
         for data_check in data_checks:
             if not data_checks[data_check]:
@@ -161,8 +160,8 @@ class FileTransferView:
 
     def problem_transfer(self, transfer_problem: tuple) -> None:
         """
-        :param transfer_problem: The data of the encountered problem during transferring of data.
         Checks the data in the parameter and displays it accordingly to the user.
+        :param transfer_problem: The data of the encountered problem during transferring of data.
         """
 
         error_message = ""
@@ -180,7 +179,7 @@ class FileTransferView:
         - Save path
         - CSV files in listbox
         """
-        self.label_save_path = "Välj var filerna ska sparas"
+        self.label_save_path.config(text="Välj var filerna ska sparas")
         self.update_listbox()
 
     def open_save_directory(self) -> None:
