@@ -180,7 +180,7 @@ class FileTransferView:
         - CSV files in listbox
         - Save path
         """
-        self.update_save_path()
+        self.label_save_path = "Välj var filerna ska sparas"
         self.update_listbox()
 
     def open_save_directory(self) -> None:
