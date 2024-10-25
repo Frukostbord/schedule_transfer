@@ -1,8 +1,8 @@
 import tkinter as tk
-from Controllers import Controller
-from View import ViewFileTransfer
-from Model import ModelMain
 
+from Controllers import Controller
+from Model import ModelMain
+from View import ViewFileTransfer
 
 """
 Program for transferring data from a .csv file with a certain format in to a .excel sheet with a certain format.

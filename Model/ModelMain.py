@@ -1,17 +1,17 @@
 # Python lib
 from typing import Union
 
+import Model.Data.Pathways as Pathways
+from Model.CheckPaths.CheckCSVPath import CheckCSVPath
+from Model.CheckPaths.CheckFile import CheckFiles
+from Model.CheckPaths.CheckSavePath import CheckSavePath
+from Model.Enum.TransferStages import TransferStage
+from Model.FileReadingWriting.FileTransfer import FileTransfer
 # Local applications
 from Model.InitializeData.InitializeData import InitializeData
-from Model.CheckPaths.CheckCSVPath import CheckCSVPath
-from Model.CheckPaths.CheckSavePath import CheckSavePath
-from Model.SetPaths.SetSavePath import SetSavePath
-from Model.SetPaths.SetCSVPath import SetCSVPath
-from Model.CheckPaths.CheckFile import CheckFiles
-from Model.FileReadingWriting.FileTransfer import FileTransfer
 from Model.RemoveFiles.RemoveCSVFiles import RemoveCSVFiles
-from Model.Enum.TransferStages import TransferStage
-import Model.Data.Pathways as Pathways
+from Model.SetPaths.SetCSVPath import SetCSVPath
+from Model.SetPaths.SetSavePath import SetSavePath
 
 
 class ModelMain:

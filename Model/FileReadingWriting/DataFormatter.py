@@ -1,4 +1,5 @@
 import os
+
 from Model.Data.MinimumStaff import MINIMUM_STAFF
 
 

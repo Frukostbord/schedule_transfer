@@ -1,6 +1,7 @@
 import shutil
-from Model.FileReadingWriting.DataFormatter import DataFormatter
+
 from Model.Data import Pathways
+from Model.FileReadingWriting.DataFormatter import DataFormatter
 
 
 class CreateCopy:

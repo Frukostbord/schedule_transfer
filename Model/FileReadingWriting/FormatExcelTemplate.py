@@ -1,5 +1,6 @@
-from Model.Data.MinimumStaff import MINIMUM_STAFF
 from openpyxl import worksheet, workbook
+
+from Model.Data.MinimumStaff import MINIMUM_STAFF
 from Model.FileReadingWriting.DataFormatter import DataFormatter
 
 

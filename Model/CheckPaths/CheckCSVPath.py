@@ -1,6 +1,5 @@
-from Model.CheckPaths.CheckFile import CheckFiles
-from Model.FileReadingWriting.DataFormatter import DataFormatter
 import Model.Data.Pathways as Pathways
+from Model.CheckPaths.CheckFile import CheckFiles
 
 
 class CheckCSVPath:

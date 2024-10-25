@@ -1,6 +1,7 @@
 from openpyxl.utils import get_column_letter
-from openpyxl.worksheet.worksheet import Worksheet
 from openpyxl.workbook.workbook import Workbook
+from openpyxl.worksheet.worksheet import Worksheet
+
 from Model.FileReadingWriting.DataFormatter import DataFormatter
 
 

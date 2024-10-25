@@ -1,6 +1,7 @@
 from typing import Union
-from Model.Enum.TransferStages import TransferStage
+
 from Model.Data.ResetData import ResetData
+from Model.Enum.TransferStages import TransferStage
 
 
 class FileTransferController:

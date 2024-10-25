@@ -1,10 +1,11 @@
 import openpyxl
-from Model.FileReadingWriting.FileExporter import FileExporter
-from Model.FileReadingWriting.FileProcessing import FileProcessing
+
+import Model.Data.Pathways as Pathways
 from Model.Enum.TransferStages import TransferStage
 from Model.FileReadingWriting.CreateCopy import CreateCopy
+from Model.FileReadingWriting.FileExporter import FileExporter
+from Model.FileReadingWriting.FileProcessing import FileProcessing
 from Model.FileReadingWriting.FormatExcelTemplate import FormatExcelTemplate
-import Model.Data.Pathways as Pathways
 
 
 class FileTransfer:
