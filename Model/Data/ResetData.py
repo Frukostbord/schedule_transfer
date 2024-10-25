@@ -27,4 +27,3 @@ class ResetData:
         Resets csv. pathway(s)
         """
         Pathways.DICTIONARY_PATHWAYS = {}
-
