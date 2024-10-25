@@ -177,8 +177,8 @@ class FileTransferView:
     def update_ui(self) -> None:
         """
         Updates the UI information for the user:
-        - CSV files in listbox
         - Save path
+        - CSV files in listbox
         """
         self.label_save_path = "Välj var filerna ska sparas"
         self.update_listbox()
