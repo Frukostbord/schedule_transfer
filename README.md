@@ -13,4 +13,4 @@ Controller: Where the program controls processed information and relays informat
   a. Choose which .csv files to copy over from
   b. Where the new files should be saved
   c. Start the data transfer process
-3. After the process, all selected files are removed and the newly created and formatted excel files will be shown to the user.
+3. After the process, all selected files are cleared from the selection and the newly created and formatted excel files will be shown to the user.
