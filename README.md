@@ -9,8 +9,8 @@ View: Where the user interacts with program
 Controller: Where the program controls processed information and relays information between the view and model
 
 1. The program initiates and checks if the excel template exists
-2. GUI shows up where the user can:\n
-  a. Choose which .csv files to copy over from
-  b. Where the new files should be saved
-  c. Start the data transfer process
+2. GUI shows up where the user can:
+   a. Choose which .csv files to copy over from
+   b. Where the new files should be saved
+   c. Start the data transfer process
 3. After the process, all selected files are cleared from the selection and the newly created and formatted excel files will be shown to the user.
