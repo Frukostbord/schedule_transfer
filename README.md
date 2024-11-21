@@ -10,7 +10,7 @@ Controller: Where the program controls processed information and relays informat
 
 1. The program initiates and checks if the excel template exists
 2. GUI shows up where the user can:<br />
-   a. Choose which .csv files to copy over from
-   b. Where the new files should be saved
-   c. Start the data transfer process
+   a. Choose which .csv files to copy over from<br />
+   b. Where the new files should be saved<br />
+   c. Start the data transfer process<br />
 3. After the process, all selected files are cleared from the selection and the newly created and formatted excel files will be shown to the user.
