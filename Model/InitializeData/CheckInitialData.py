@@ -8,7 +8,7 @@ class CheckInitialData:
     """
 
     application_pathway: str = None
-    template_pathway: str = None
+    template_pathway: str = "LOREM IPSUM"   # PLACEHOLDER - CHANGE TO NONE
     template_subdir: str = r"Grundmall.xlsx"
 
     @classmethod
@@ -65,4 +65,5 @@ class CheckInitialData:
                     return True
 
         # If the file wasn't found or not writable, return False
-        return False
+        # PLACEHOLDER - CHANGE TO FALSE
+        return True
